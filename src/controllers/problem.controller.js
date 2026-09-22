@@ -77,8 +77,85 @@ const getAllProblems = asyncHandler(async (req, res) => {
         );
 });
 
+const getProblemById = asyncHandler(async (req, res) => {
+    const { problemId } = req.params;
+
+    const problem = await Problem.findById(problemId);
+    if (!problem) {
+        throw new ApiError(404, " Problem is not found ")
+    }
+    return res.status(200)
+        .json(new ApiResponse(200, problem, "problem fetched successfully"))
+})
+
+const updateProblem = asyncHandler(async (req, res) => {
+    const { problemId } = req.params;
+
+    const problem = await Problem.findById(problemId);
+
+    if (!problem) {
+        throw new ApiError(404, "Problem not found");
+    }
+
+    const {
+        title,
+        description,
+        difficulty,
+        constraints,
+        inputFormat,
+        outputFormat,
+        testCases,
+        tags
+    } = req.body;
+
+    problem.title = title || problem.title;
+    problem.description = description || problem.description;
+    problem.difficulty = difficulty || problem.difficulty;
+    problem.constraints = constraints || problem.constraints;
+    problem.inputFormat = inputFormat || problem.inputFormat;
+    problem.outputFormat = outputFormat || problem.outputFormat;
+    problem.testCases = testCases || problem.testCases;
+    problem.tags = tags || problem.tags;
+
+    await problem.save();
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                problem,
+                "Problem updated successfully"
+            )
+        );
+});
+const deleteProblem = asyncHandler(async (req, res) => {
+    const { problemId } = req.params;
+
+    const problem = await Problem.findById(problemId);
+
+    if (!problem) {
+        throw new ApiError(404, "Problem not found");
+    }
+
+    await Problem.findByIdAndDelete(problemId);
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                null,
+                "Problem deleted successfully"
+            )
+        );
+});
+
 
 export {
     createProblemController,
     getAllProblems,
+    getProblemById,
+    updateProblem,
+    deleteProblem,
 }
