@@ -48,9 +48,15 @@ const problemSchema = new Schema({
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
+    },
+    timeLimit: {
+        type: Number,
+        default: 1000 // execution time limit in milliseconds
+    },
+    memoryLimit: {
+        type: Number,
+        default: 256 // memory limit in MB
     }
-       
-    
 },
 {
     timestamps: true

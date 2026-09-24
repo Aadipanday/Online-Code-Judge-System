@@ -19,10 +19,12 @@ app.use(cookieParser())
 import userRouter from "./routes/user.routes.js";
 import problemRouter from "./routes/problem.routes.js"
 import submissionRouter from "./routes/submission.routes.js";
+import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/problems", problemRouter)
 app.use("/api/v1/submissions", submissionRouter);
 
+app.use(errorHandler);
 
 export {app}

@@ -22,14 +22,16 @@ export const verifyJWT = asyncHandler( async(req, res , next) => {
     
         req.user = user;
         next()
+    } catch (error) {
+        if (error instanceof ApiError) {
+            throw error;
+        }
+        throw new ApiError(401, error?.message || "Invalid access token");
     }
-    catch (error) {
-        throw new ApiError(401, error?.message || "Invalid access token")
-    }
-})
+});
 
 export const roleCheck = asyncHandler(async (req, res, next) => {
-    if (req.user.role !== "admin") {
+    if (!req.user || req.user.role !== "admin") {
         throw new ApiError(403, "Access denied. Admin only.");
     }
 

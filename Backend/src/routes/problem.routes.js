@@ -5,8 +5,12 @@ import { createProblemController, deleteProblem, getAllProblems, getProblemById,
 
 const router = Router();
 
-router.route("/create").post(verifyJWT,roleCheck,createProblemController)
-router.route("/getAll").get(getAllProblems)
+router.route("/")
+    .get(getAllProblems)
+    .post(verifyJWT, roleCheck, createProblemController);
+
+router.route("/create").post(verifyJWT, roleCheck, createProblemController);
+router.route("/getAll").get(getAllProblems);
 router.route("/:problemId").get(getProblemById);
 router.route("/:problemId").patch(verifyJWT,roleCheck,updateProblem)
 router.route("/:problemId").delete(
